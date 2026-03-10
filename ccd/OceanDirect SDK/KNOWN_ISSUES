@@ -1,0 +1,32 @@
+﻿Known issues in OceanDirect
+1. General (all spectrometers)
+  a. getIndicesAtWavelengthRange – Always returns a small value (Ex: 2E-315) as the value for the last wavelength. This is incorrect.
+  b. isFeatureEnabled enums are mis-numbered when accessed in Matlab. This does not affect queries in C#.
+
+2. OFX/HDX
+  a. getBoxcarWidth and setBoxcarWidth are not valid for this spectrometer. They return errorCode = 6 instead of the correct errorCode = 5 or 24.
+  b. All commands regarding DC Input and Output on GPIO pins are under development and have not been fully tested.
+    i. getVoltageDCInputVolts 
+    ii. getNumberOfVoltageDCOutputs
+    iii. getMaximumOutputVoltageDC
+    iv. getMinimumOutputVoltageDC
+    v. configureAltPin (AnalogOut)
+    vi. setVoltageDCOutVolts
+  c. Ipv4Controller() functions work but only with DHCPEnabled set to true, ie. only dynamically granted IP addresses are valid.      setStaticIpAddress, deleteStaticIpAddress do not work.
+
+3. QEPro
+  a. Spectral_Processing Advanced Feature returns false but the feature under it applicable to the QEPro – external trigger  - works as expected.
+  b. Optical Bench queries produce errorCode = 6 instead of the correct errorCode = 5 or 24.
+
+4. Flame
+  a. Spectral_Processing Advanced Feature returns false but the feature under it applicable to the Flame – external trigger  - should be true.
+  b. The external trigger functions do not work as expected. 
+
+5. STS 2.0
+  a. lampEnable does not enable/disable the output pin. The errorCode returned is 0 but the electrical signal does not change.
+  b. setStrobeEnable(SingleStrobe) does not work but the errorCode returned is 0.
+  c. getStrobeMaximumWidth(SingleStrobe) always returns 0 with an errorCode = 0.
+  d. Optical Bench queries, getSlitWidth, setSerialNumber(OpticalBench) produce errorCode = 6 and no valid value.
+
+6. Matlab and Labview program will crash the seconds time the programs runs. For some reason, it works well on the first run but
+   always crash the second time.

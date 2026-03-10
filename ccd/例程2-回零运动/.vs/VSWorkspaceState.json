@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\test_faction2",
+    "\\test_faction2\\test_faction2",
+    "\\test_faction2\\test_faction2\\bin",
+    "\\test_faction2\\test_faction2\\bin\\Debug",
+    "\\test_faction2\\test_faction2\\obj",
+    "\\test_faction2\\test_faction2\\obj\\x86",
+    "\\test_faction2\\test_faction2\\obj\\x86\\Debug",
+    "\\test_faction2\\test_faction2\\obj\\x86\\Release",
+    "\\test_faction2\\test_faction2\\Properties"
+  ],
+  "SelectedNode": "\\test_faction2\\test_faction2.sln",
+  "PreviewInSolutionExplorer": false
+}

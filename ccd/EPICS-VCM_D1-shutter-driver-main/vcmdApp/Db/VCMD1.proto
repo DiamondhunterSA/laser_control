@@ -1,0 +1,11 @@
+#300 series read pressure
+
+Open {out "@";}
+Close {out "A";}
+Trigger {out "B";}
+Reset {out "C";}
+Gateon {out "F";}
+Gateoff {out "G";}
+Auxenable {out "D";}
+Auxdisable {out "E";}
+

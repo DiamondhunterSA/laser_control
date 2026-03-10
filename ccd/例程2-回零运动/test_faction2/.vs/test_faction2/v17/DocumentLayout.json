@@ -1,0 +1,85 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F77DCE47-3DDB-42FE-B0FE-19E26497B867}|test_faction2\\test_faction2.csproj|e:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F77DCE47-3DDB-42FE-B0FE-19E26497B867}|test_faction2\\test_faction2.csproj|solutionrelative:test_faction2\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F77DCE47-3DDB-42FE-B0FE-19E26497B867}|test_faction2\\test_faction2.csproj|E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\properties\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F77DCE47-3DDB-42FE-B0FE-19E26497B867}|test_faction2\\test_faction2.csproj|solutionrelative:test_faction2\\properties\\assemblyinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F77DCE47-3DDB-42FE-B0FE-19E26497B867}|test_faction2\\test_faction2.csproj|E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F77DCE47-3DDB-42FE-B0FE-19E26497B867}|test_faction2\\test_faction2.csproj|solutionrelative:test_faction2\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F77DCE47-3DDB-42FE-B0FE-19E26497B867}|test_faction2\\test_faction2.csproj|E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\Zmcaux.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F77DCE47-3DDB-42FE-B0FE-19E26497B867}|test_faction2\\test_faction2.csproj|solutionrelative:test_faction2\\Zmcaux.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Form1.cs",
+              "DocumentMoniker": "E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\Form1.cs",
+              "RelativeDocumentMoniker": "test_faction2\\Form1.cs",
+              "ToolTip": "E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\Form1.cs",
+              "RelativeToolTip": "test_faction2\\Form1.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAADwvxMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-01-19T05:49:43.264Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AssemblyInfo.cs",
+              "DocumentMoniker": "E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\Properties\\AssemblyInfo.cs",
+              "RelativeDocumentMoniker": "test_faction2\\Properties\\AssemblyInfo.cs",
+              "ToolTip": "E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\Properties\\AssemblyInfo.cs",
+              "RelativeToolTip": "test_faction2\\Properties\\AssemblyInfo.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T13:05:04.703Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\Program.cs",
+              "RelativeDocumentMoniker": "test_faction2\\Program.cs",
+              "ToolTip": "E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\Program.cs",
+              "RelativeToolTip": "test_faction2\\Program.cs",
+              "ViewState": "AgIAAAgAAAAAAAAAAAAiwBEAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T13:04:47.59Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Zmcaux.cs",
+              "DocumentMoniker": "E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\Zmcaux.cs",
+              "RelativeDocumentMoniker": "test_faction2\\Zmcaux.cs",
+              "ToolTip": "E:\\ccd\\\u4F8B\u7A0B2-\u56DE\u96F6\u8FD0\u52A8\\test_faction2\\test_faction2\\Zmcaux.cs",
+              "RelativeToolTip": "test_faction2\\Zmcaux.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T13:04:37.973Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

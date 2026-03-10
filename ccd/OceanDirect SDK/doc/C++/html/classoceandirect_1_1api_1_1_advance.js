@@ -1,0 +1,26 @@
+var classoceandirect_1_1api_1_1_advance =
+[
+    [ "Advance", "classoceandirect_1_1api_1_1_advance.html#abfb97adb371466d3e898641515f19ab2", null ],
+    [ "~Advance", "classoceandirect_1_1api_1_1_advance.html#a0f7ef89f20dbb6b4f42ff0e9556d590b", null ],
+    [ "ActivityControl", "classoceandirect_1_1api_1_1_advance.html#a4e6832babcf5abdcf3d9febc59a23199", null ],
+    [ "AutoNullingControl", "classoceandirect_1_1api_1_1_advance.html#ac39cf1d0b3c59daa055a488b9c8976b6", null ],
+    [ "BackToBackControl", "classoceandirect_1_1api_1_1_advance.html#ac5af8531b600102eb1ea6ae6ac0b00f5", null ],
+    [ "ContinuousStrobeControl", "classoceandirect_1_1api_1_1_advance.html#a44a3d15ba385ee7d3e246b8f4f58d3a1", null ],
+    [ "DataBufferControl", "classoceandirect_1_1api_1_1_advance.html#a4ea6f2ec4b8fef17fbb49b4c2aa9927d", null ],
+    [ "DeviceAliasControl", "classoceandirect_1_1api_1_1_advance.html#a6834acc46ca22dc73e884c26da5b8c91", null ],
+    [ "DeviceInformationControl", "classoceandirect_1_1api_1_1_advance.html#ab2ab4e72e0b06e6a878bbdcd01fc71cd", null ],
+    [ "DeviceRevisionControl", "classoceandirect_1_1api_1_1_advance.html#a2904362a23e50073217fa99a16747530", null ],
+    [ "EthernetControl", "classoceandirect_1_1api_1_1_advance.html#a6dd54d13c5231f1df5c4e69a59787e09", null ],
+    [ "GpioControl", "classoceandirect_1_1api_1_1_advance.html#a57f0a399848a3cfd2ffe7b9bc35e946c", null ],
+    [ "Ipv4AddressControl", "classoceandirect_1_1api_1_1_advance.html#a4244a7ff67faa2973f12ff9b31c91107", null ],
+    [ "LightSourceControl", "classoceandirect_1_1api_1_1_advance.html#a32b2b208a94389530a8df750e1a7e6b3", null ],
+    [ "NetworkConfigurationControl", "classoceandirect_1_1api_1_1_advance.html#aa9ed59dba2eafcb99cd435532206f4b1", null ],
+    [ "NonLinearityControl", "classoceandirect_1_1api_1_1_advance.html#afb0cd789e37fdb7a6bec0da2cdb9a494", null ],
+    [ "PixelControl", "classoceandirect_1_1api_1_1_advance.html#a20398e53db254f8840378459c597f949", null ],
+    [ "SerialPortControl", "classoceandirect_1_1api_1_1_advance.html#a104077a4a8fee0d1886880a2e763a5d2", null ],
+    [ "ShutterControl", "classoceandirect_1_1api_1_1_advance.html#a2a70f77669875fdb4018d785363b3028", null ],
+    [ "SingleStrobeControl", "classoceandirect_1_1api_1_1_advance.html#a3cf79afc2fe550c9289c98baccf54eed", null ],
+    [ "SpectrumAcquisitionControl", "classoceandirect_1_1api_1_1_advance.html#ab2eb36660e69b547b1b698c6111ef885", null ],
+    [ "ThermoElectricControl", "classoceandirect_1_1api_1_1_advance.html#ad2ba053fd07dbc1f909d5d5d3a6cefa7", null ],
+    [ "UserStringControl", "classoceandirect_1_1api_1_1_advance.html#a3e365eaaf8e02c854a66624864e9708c", null ]
+];

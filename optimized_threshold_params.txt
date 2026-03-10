@@ -1,0 +1,14 @@
+threshold: 140
+threshold_method: fixed
+morph_kernel: 5
+gaussian_blur: 4
+canny_low: 23.378734622144094
+canny_high: 83.63063854715875
+edge_threshold: 0.5
+width_method: fwhm
+width_threshold: 0.5
+contrast_enhance: 1.65625
+invert: True
+roi_height: 100
+smooth_sigma: 4.0
+×î¼Ñ¿í¶È: 25.2ÏñËØ

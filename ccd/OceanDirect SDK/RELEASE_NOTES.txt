@@ -1,0 +1,395 @@
+IMPORTANT:
+  * Release 3.1.0 and later may not work in linux with older compiler (glibc-2.28 (and below), g++6). If an older system needs to use the latest OceanDirect
+    then the recommended solution is to either upgrade the compiler to the latest version or upgrade the system to a newer version with latest compiler.
+  * Release 2.0.0 requires a FW upgrade for all OBP2 enabled devices in order to fully utilize the command query functionality.
+    -if you don't do this then some feature might be disabled. The work around is to revert back to 1.33.0 version.
+    -this version will not impact older units.
+
+Pending Issues:
+  * Reimplementation of time, stray-light, and raw bus features for new OBP2 architectures needs further testing
+  * While your program is continuosly reading spectra, DO NOT kill your program or put your
+    computer into sleep/hibernate mode as doing so will will result in failure at openDevice()
+    call on the 2nd run. This is due to the device responded with different command code. The
+    only remedy for now is to unpower and repower back the unit.
+  * FX will get stuck when you read raw spectra with metadata at some point after you disable data buffering. The solution
+    for now is to leave the data buffering on.
+  * FX/HDX network connected units after reset device will return a reset-device command code for commands such as get serial number, get wavelength
+    coefficients, etc. This is a FW bug.
+  * FX/HDX delete static ip address starts at index 1 instead of 0.
+  * Shutter function is only implemented for OceanNR.
+  * MayaPro has FW issue. The get_trigger_mode() function always returned 0. We dont have this issue with Flame-S which has
+    the same command and input.
+  * NIRQuest has a FW issue. The function get_continuous_strobe_period() returns bad value. This issue 
+    could be related to set_continuous_strobe_period(). The set_continuous_strobe_period_width() has issue with this unit.
+  * Dynamic device probing support for ethernet comm feature on new spectrometer only worked in Windows. There is still issue with mac and linux.
+    
+Usage Requirements:
+  * GPIO set/get data command usage on NIRQuest256, USB4000, MayaPro, Flame-T and HR2000+ES (and probably some other units I missed). 
+    -you must call the alternate function first and set it to GPIO pin in order for the set/get data command to work.
+
+Python Requirements:
+  Need at least version 3.9.5
+
+*************************************************************************************************************************
+*                                Revision History                                                                       *
+*************************************************************************************************************************
+Release 3.1.4
+23 January 2025
+  Fixed Labview crashing on the 2nd run when using Advanced functions.
+  Flip spectrum byte ordering for Flame-W starting with firmware (1.0.7) and FPGA (1.0.8).
+
+Release 3.1.3
+09 December 2024
+  Updated trigger mode support for Flame-S to include trigger mode 1 (software).
+30 October 2024
+  SR4/HR4 allowed setting out of bounds integration time value. OceanDirect would still report an error code ERROR_INVALID_ARGUMENT.
+  Updated network related API to add more notes specific to FX/HDX units.
+  Updated documentation API to include error codes. 
+  Added .NET function wrapper to return all nonlinearity coefficients in a single call.
+  Added support for unified trigger modes on the following devices:
+      * NIRQuest with FPGA at least 1.8.0
+      * Maya2000Pro and USB4000(Flame-T) with at least FPGA-3.0.0 or latest.
+
+Release 3.1.2
+20 October 2024
+  Added limited set bad pixel command for core installer. The supported devices are OceanNR, NIRQuest256, and NIRQuest512.
+  Restored the conditional compilation in the API header files to depend on the macro _WIN32 instead of _WINDOWS
+  Restored the extern "C" block to the file OceanDirectConstants.h
+  Added limited set bad pixel command for core installer. The supported devices are OceanNR, NIRQuest256, and NIRQuest512.
+  Added device reset command for QEPro. A program must call this command to reset the device before closing it. This is a
+  work around an exiting FW/FPGA bug where the next program run may cause the read spectra command freeze.
+
+Release 3.1.1
+17 September 2024
+  Added support for unified trigger modes for USB2000Plus and Flame-NIR running with at least FPGA-3.0.0 or latest.
+  
+Release 3.1.0
+20 August 2024
+  Fixed maximum integration time for QEPro to 60 minutes.
+  Replaced HR2 maximum integration time from 65 seconds to 6 seconds.
+  Added new autonulling commands (FPGA digital gain/offset) for QEx support.
+      * getFPGADigitalGain(), getFPGADigitalOffset
+  Fixed error when reading spectra from SR6, HR6, and NR devices.
+  Fixed error when reading optical bench data from uninitialized lighthouse devices.
+  Add read system revision command for selected spectrometer.
+  Fixed bad pixel correction to implement linear interpolation on bounded data.
+  Fixed lighthouse optical bench id and optical bench serial number to send the correct command code.
+  Removed string null terminator character for optical bench id to make it consistent with how OmniDriver write this data to eeprom.
+  
+Release 3.0.0
+30 June 2024 (INTERNAL RELEASE ONLY)
+  The functions set_ip_address_assigned_mode(), set_ip_address_assigned_mode(), and get_network_configuration() 
+  for OBP2 devices are changed. True value means the device is using DHCP for IP address generation.
+  Added more API support for Serial Communication feature.
+  Added werfen product support. This device is running in USB Full Speed.
+  Renamed some python wrapper to make it consistent with C-API:
+      * changed get_user_string_count2() to get_user_string_count1()
+      * changed get_user_string2() to get_user_string1()
+      * changed set_user_string2() to set_user_string1()
+
+Release 2.4.1
+03 April 2024
+  Fixed localization issue with Labview which uses "," instead of "." for decimal place. This bug affected
+  legacy units which stored wavelength and nonlinearity coefficients as string instead of binary.
+  
+Release 2.4.0
+29 February 2024
+  HDX/FX mac address and ip address functions will no longer need the interface index agruments. These
+  functions will be deprecated in the future.
+  Changed QEPro minimum integration time to 8ms.
+  Fixed GPIO gpio_get_value1() which always return low(0) even though it was set to high(0) successfully. 
+  Fixed python wrapper open_device() function that freeze when called twice.
+  Removed bind() function call to speed up the network device probing.
+  Added a boxcar function for manual spectrum correction.
+  Added static and dynamic IP address support for ethernet comm feature on new OBP2 spectrometer. Dynamic device probing only
+  worked in Windows for OBP2 devices.
+  Fixed OD from crashing when re-running again after the previous run reading lighthouse unit.
+  spectra was killed via Ctrl-C or Task Manager
+  Fixed python wrapper from throwing exception when calling open_vice() repeatedly.
+  Improved usb device probing by calling the probe function once.
+  Added OceanQE and OceanQR.
+  Added bad pixel removal correction.
+    
+Release 2.3.0
+30 October 2023
+  Fixed OD crashing when lighthouse unit has empty wavelength coefficients.
+  Fixed python wrapper get_temperature_count() which may returned uninitialized variable.
+  Fixed OD crashing when using IDEXX unit which has the same PID with some legacy units.
+  Fixed for memory leak when calling dynamic probing function on network attached HDX/FX units.
+  Fixed read string function that removed the last character.
+  Added support for MayaPro acquisition delay command.
+  Added support for HDX/FX set serial number command.
+  Added support for HDX/FX set/get default gateway command.
+  Added support for HDX/FX set/get multicast group enabled command.
+  Added support for NR to use legacy function to set/get high gain mode.
+  Added multicast group enabled command for HDX/FX.
+  Initialized legacy device GPIO to automatically apply alternate function to GPIO mode. Users can now
+  call any GPIO functions straight away.
+  Internal: refactor OBP2 code by removing exchange and protocol classes to simplify implementation and maintenance.
+
+Release 2.2.0
+05 September 2023
+  Fixed issue with Mac on some legacy units.
+  Fixed read eeprom function which returned incorrect values.
+  Added IDEXX units support for ST, SR4, and SR6.
+  Fixed OceanNR TEC commands which returns some out of range values.
+  Fixed OBP2 read string functions to properly initialized the buffer with null character.
+  Fixed memory leak when calling dynamic probing function.
+  Reading onboard buffered spectra will now return error code 0 when the buffer is empty.
+  Changed OceanNR maximum integration time to 120 sec.
+  Automatically apply electric dark pixel correction when the nonlinearity correction is enabled.
+  Fixed the mac address commands support for HDX/FX units.
+  Deleted bad pixels entry on OBP2 based units by sending empty array.
+  Fixed network connected HDX reset device issue where it throws a segmentation fault.
+  Internal: The protocol and exchange files were removed for the following OBP2 features: shutter, ethernet, network configuration,
+  time, serial number, raw bus, optical bench, user string, irradiance calibration, thermo-electric, pixel info,
+  nonlinearity, gpio, LED, and continuous strobe.
+  
+Release 2.1.0
+15 July 2023
+  Build .NET assemblies as strong-named.
+  Removed set_continuous_strobe_width() support for STS as this is not supported by the device.
+  Internal: set GPIO alternate function into GPIO mode for some legacy devices.
+  Internal: The protocol and exchange files were removed for the following OBP2 features: autonulling, device alias, 
+  device revision, single strobe, and lamp.
+  Added getBadPixelIndices command for NIRQuest and OBP2 enabled units.
+  Added getHighGainMode() command for NIRQuest.
+  Put maximum limit when setting autonullin values to prevent data transfer error.
+  Fixed set_continuous_strobe_period_width() for STS.
+  OceanNR TEC get_enable() and get_fan_enable() functions will always returned true. The equivalent set commands
+  will not be supported since those functions are enable enabled in this unit.
+  Internal: updated native windows socket implementation to replace -1 with INVALID_SOCKET value.
+  
+Release 2.0.0
+10 May 2023
+  Requires FW update from OceanST, OceanSR***, OceanHR***, OceanNR. This release was tested with the FW/FPGA versions listed below:
+    * Device Model  Micro / FPGA
+      -----------------------------
+      OceanSR2 	    1.2.5 / 1.3.8
+      OceanHR2 	    1.2.5 / 1.3.8
+      OceanSR4 	    1.2.5 / 1.3.3
+      OceanHR4 	    1.2.5 / 1.3.3
+      OceanHR6 	    1.2.5 / 1.3.3
+      OceanSR6 	    1.2.5 / 1.3.3
+      OceanNR		1.2.1 / 1.3.0
+      OceanST		1.2.5 / 1.3.1
+  Added HSAM support for OceanST. Need firmware update to take advantage of this feature.
+  Fixed reset_device() function that get stuck when called on ethernet connected FX/HDX units. Need firmware update to fix this 
+  issue completely.
+  Changed OceanST minimum integration time down to 1.56ms.
+  Fixed bug where different error code were returned when running in Ubuntu.
+  Fixed reading of device model and manufacturing strings which included bad characters.
+  Fixed get_index_at_wavelength(), get_indices_at_wavelength_range(), and get_indices_at_wavelengths() that throws runtime exception in python.
+  Fixed get_maximum_intensity() which returns 0.
+  Added shutter support for OceanNR.
+  Added GPIO alternate functions to enable output value (high/low) to work properly on legacy units.
+  Removed stability scan support for OBP2 devices.
+  The addNetworkDevice() will now return the device id.
+  Replaced README.md file contents with sample code for easier usage reference.
+  Added missing header files for network and ethernet related features.
+  .NET Wrapper:
+    * Changed addNetworkDevice() to return integer.
+    * Changed readIrradCalibration() return type from array<double> into array<float>.
+    * Added missing feature id namely FEATURE_ID_NETWORK_CONFIGURATION and FEATURE_ID_ETHERNET.
+    * Changed TEC setEnable(long, int%, byte) signature into setEnable(long, int%, bool) to make it consistent with getEnable().
+    * Changed TEC function name from getSetpoint() into getTemperatureSetpointDegreesC()
+    * Changed function name from readTemperatureDegreesC() into getTemperatureDegreesC() to 
+      make the function name consistent with setTemperatureSetpointDegreesC().
+  Python Wrapper: 
+    * Added get_network_device_ids() that return list of device network id's.
+    * Fixed error with network configuration as unsupported feature.
+    * Fixed error with ethernet as unsupported  feature.
+    * Fixed python crashing when reading irradiance calibration. This function is not fully supported yet.
+    * Changed function name from get_tec_setpoint() into get_temperature_setpoint_degrees_C()
+    * Changed function name from set_tec_setpoint() into set_temperature_setpoint_degrees_C()
+  Removed the following functions from the API.
+    * setSerialNumber(), setWavelengthCoefficients(), setSaturationLevel(), setBaselineLevel()
+    * getUnformattedSpectrumLength(), getUnformattedSpectrum(), getRevisionHardware()
+    * readEepromSlot(), setGpioOutputAlternate(), setGpioOutputAlternate()
+    * getGpioOutputAlternate(), readIrradCalibration(), readCalibrationDataSize()
+    * writeIrradCalibration(), hasCollectionArea(), readCollectionArea(), writeCollectionArea()
+    * hasVariableLightSourceIntensity(), getLightSourceIntensity(), setLightSourceIntensity()
+    * setNonlinearityCoeffs(), getBenchWavelength(), getSlitWidthMicrons(),getBenchSerialNumber()
+    * getCoating(), getFilter(), getGrating(), getLensInstalled(), getBenchId(), setBenchId()
+    * getFiberDiameter(), setFiberDiameter(), setSlitWidthMicrons(), setBenchSerialNumber()
+    * setCoating(), setFilter(), setGrating()
+    * setBadPixelIndices(), accessUsbRead(), accessUsbWrite(), accessEthRead(), accessEthWrite()
+    * getStringDescriptor(), getTemperatureCount(), getTemperature(), setTecFanEnable()
+
+Release 1.33.0
+25 October 2022
+  Changed HSAM minimum integration time to 3705us for HR4/SR4.
+  Fixed set/get gigabit ethernet status to correct value (true=enable, false=disable). The
+  manual is incorrect compared to the actual FW behavior.
+  Enable Onboard Summation for SR4/HR4 devices. 
+  Python Wrapper: 
+    * Added set/get default gateway commands.
+    * Fixed probing on where manually added network devices cannot be found.
+    * Put expected types on function arguments and return value.
+    * Requires at least python 3.9.5 or later
+  Reimplementation of temperature feature for new OBP2 architecture.
+  Added ethernet setup commands for FX and HDX.
+  HR2 getTriggerMode returned different values. 
+  Reimplementation of temperature feature for new OBP2 architecture.
+  Allow closing and probing single device while other devices are actively used.
+
+Release 1.32.1
+21 September 2022
+  Changed SR2/HR2 minimum integration time to 1us.
+
+Release 1.32.0
+31 August 2022
+  Added network settings support for both FX and HDX.
+  Fixed get integration time increment for STS.
+  Added SR6, HR6, and NR support.
+  Setting integration time out of bound will return a non-zero error code.
+  Fixed SR4/HR4 scan-averaging function where we get an abnormaly high count.
+  Python Wrapper:
+    * Updated python property file to make it work with PYTHONPATH.
+    * Fixed get_spec_raw_with_meta() function to return python list of list instead of 
+      list of native c-array.
+  
+Release 1.31.0
+29 July 2022
+  Started moving OBP2 implementation away from legacy code.
+  Removed extra 16 pixels from SR4/HR4 spectra.
+  Set SR4/HR4 minimim and maximum integration time value to 3.8ms and 10sec.
+  Set HR2 minimim and maximum integration time value to 10us and 65sec.
+  Set SR2 minimim and maximum integration time value to 10us and 6sec.
+  Automatically use the maximum integration value if the value set is greater than the maximum integration 
+  time. The same behavior applies for the minimum integration time.
+  Removed support on some legacy devices such as USB2000, Spark, Jaz, Ventana, and Torus.
+  Removed Analog In and Analog Out features from all spectrometers.
+  Python Wrapper: 
+    * Fixed is_feature_id_enabled() that throws no device found error.
+    * Added function get_enable_lamp() to return the lamp state form OBP2 devices.
+    * Renamed function name from enable_lamp() to set_enable_lamp(). This will make it
+      consistent with the new function get_enable_lamp().
+    * Fixed set serial number commands for legacy spectrometers (FX2).
+    * set_trigger_mode() should call decode_error() function instead of using device.devode_error().
+  Prevent running electric dark correction on FX device since it doesn't have electric dark pixels.  
+  Enable nonlinearity correction independently from electric dark correction.
+
+Release 1.30
+07 June 2022
+  Added Ocean-ST continuous strobe increment limit by 10us.
+  Added dark spectrum correction functions. Before using dark_correct_spectrum2(darkSpectrum, illuminatedSpectrum)
+  and nonlinearity_correct_spectrum2(darkSpectrum, illuminatedSpectrum) functions, you may want to disable EDC/NLC 
+  correction first to avoid possible double EDC/NLC correction.
+  Changed Ocean ST minimum integation time to 1.56ms.
+  Fixed OceanDirect windows 10 installer to show version number in the "Apps & features" settings.
+  Updated API to include more descriptive documentation.
+  Grouped API documentation files into C++, NET, and Python.
+  Removed optical bench feature from all supported legacy devices. OBP2 enabled device fully supported this feature.
+  Calling getOpticalDarkPixelRange() and getTransitionPixelRange() on FX will return error code 24.
+  Fixed software scan-averaging which returns way higher average count than expected (ex: compared to single scan).
+  Moved QEPro and STS scan-averaging into software side due to firmware bug.
+  Added get_minimum_averaging_integration_time() function which return valid minimum inetgration time allowed for onboard sca
+  Added minimum summation integration time for OBP2 onboard summation functions.
+  Added support for manually adding network attached spectrometer.
+  Python Wrapper:
+    * Moved the functions set_electric_dark_correction_usage(), get_electric_dark_correction_usage(),
+      set_nonlinearity_correction_usage(), and get_nonlinearity_correction_usage() into Spectrometer 
+      class to make it consistent with .NET wrapper.
+    * Changed probe_devices() into find_devices() function. Added find_usb_devices() to 
+      make it consistent with .NET wrapper.
+    * Removed close_all_devices() and get_devices() function.
+    * Removed get_device(id) as this is a duplicate of open_device() function.
+    * Moved acquisition delay functions into Spectrometer class.
+    * Removed get_device_ids() input parameter.
+    * added set functions for optical bench features.
+  Fixed wavelength range functions possible buffer overflow error due to unspecified buffer size.
+  Fixed wavelength range query to return inclusive values only.
+  Added MayaPro Single Strobe Limiting parameters min/max/ delay /Width.
+  Removed FEATURE_ID_SPECTRUM_PROCESSING enum and setScansToAverageInSW() function.
+  Changed SR2 and HR2 maximum integration time to 6 seconds.
+  Moved Acquisition Delay out of Advanced features into Basic features.
+  Added HR4 and SR4 support. 
+  Fixed optical bench set coating comman for FX, HDX, and QEPro.
+  Fixed some QEPro optical bench command that return error code 6.
+  Added software scan averaging support for legacy devices. 
+  Added software boxcar averaging support.
+  Moved scan averaging and boxcar averaging functions into Advanced class to make it consistent with the .NET wrapper.
+  Added a patch for FX segmentation fault when reading spectra with metadata due to 0 values in metadata header. This is a FW bug.
+
+Release 1.29
+31 March 2022
+  Added .NET and python wrapper for pixel info commands.
+  Changed SR2/HR2 pixel count from 2122 to 2110.
+  Removed LimeLM license function support.
+  Fixed firmware query command for FlameNIR returning incomplete value.
+  Refactor HR2, STS3, and SR2 to use OBP2Device and generic OBP2SpectrometerFeature class.
+  Python Wrapper:
+    * Moved set/get trigger mode functions into Spectrometer class.
+    * Renamed gpio_get_output_enable()/gpio_get_value() functions to gpio_get_output_enable1()/gpio_get_value1().
+    * Returned bool value from c-functions will be converted into c_ubyte then converted 
+      to bool in order to make it work in linux.
+    * Added OBP2 LED state command.
+    * Added usb model and manufacturer commands.
+    * Added enable and disable nonlinearity and electric dark correction commands.
+    * Added read state of electric dark and nonlinearity correction usage.
+    * Added read command list from the device.
+    * Added autonulling and baudrate commands.
+    * Added device alias commands.
+    * Added wavelength coefficients, nonlinearity coefficients, and optical bench id/fiber diameter.
+    * Added data buffer enable, fpga revision, some gpio commands.
+    * Fixed irradiance set/get calibration commands.
+  Fixed usb read buffer overflow error in linux.
+  Removed temperature feature from MayaPro device.
+  Fixed get firmware revision command returning incomplete string due to insufficient buffer provided by the .Net/Python wrapper.
+  Set error code to 0 for succesful execution of git slit width command.
+  Changed FPGA revision format to x.x.x format.
+  Fixed optical bench get fiber diameter command to return error code 24 for FX, NIRQuest, HR4000, QEPro.
+  Disable serial port command support for STS3 and SR2.
+  Updated user string and device alias api document to include notes on returning an error code 
+  if these fields are not populated yet in the device.
+  Changed optical bench get slit width command to return an int value instead of string.
+  Added get pixel mapping command.
+  Changed electric dark pixel indices from double to int (changes internal to OceanDirect only).
+  Unified OBP2 read spectra implementation for all OBP2 enabled devices (changes internal to OceanDirect only).
+  Added .NET wrapper for get error string command.
+  Changed optical bench get slit width and serial number api document to include notes on returning 
+  an error code if these fields are not populated yet in the device.
+
+Release 1.28
+25 December 2021
+  Added python wrapper functions to enable/disable electric dark and nonlinearity corrections.
+  Added QEPro missing commands for abort spectra acquisition, acquire spectra to buffer, and get device idle state.
+  Fixed a bug which affect scan-to-average calculation.
+  Updated get revision function to now include release point.
+  Updated file name from RELEASE_NOTES TO RELEASE_NOTES.txt.
+  Fixed start index offset when returning spectra back to the user. The dummy pixels uses 4-bytes instead of 2-bytes.
+  Removed set/get spectra acquisition mode from OBP-2.0 protocol.
+  Fixed MathLab crash when using .NET wrapper. Needs testing on other machine and on Labview.
+  Added pixel summation command for SR2.
+  Removed the ref argument of .NET wrapper method setWavelengthCoefficient()
+  Get bench serial command is not supported by FX/QEpro/STS. Return error code 24.
+  Fixed .NET wrapper method for get device alias and user string that throws exception.
+  Removed duplicate shutdown method in .NET wrapper. The official method is shutDown().
+  Added firmware and FPGA revision command support for NirQuest-256/NirQuest512.
+  Added get single strobe maximum pulse delay value for NirQuest-256, NirQuest-512, Flame-S, and Flame-T.
+  Added set/get spectra acquisition mode for SR2.
+  Added support for Ocean SR2 and Ocean STS devices.
+  Added set/get wavelength coefficients commands.
+  Added GPIO command support.
+  Optimized read spectra performance by utilizing user provided buffer.
+
+Release 1.27
+24 August 2021
+  Python and .Net wrapper will crash when using wavelength-range related functions.
+  HR4000 continuous strobe settings are incorrect.
+  STS2 report random numbers as default during power up for single strobe delay/single strobe width
+  NIRQuest-512 set/get continuous strobe period returns error code 24.
+  NIRQuest-512 and HR4000 GpioController().getValue and GpioController().setValue do not work for bits 8 and 9.
+  Add static IP address does not work on the FX/HDX. The issue is on the FW side where the static IP address is not persisted sometimes.
+  SpectralProcessing isFeatureEnabled is incorrectly returning FALSE for the following spectrometers. This only applies to device that supports onboard spectral processing.
+
+Release 1.26
+27 July 2021
+  Added python wrapper and python api documentation.
+  Fixed missing C/C++ header files causing build errors.
+  
+Release 1.25
+14 May 2021
+  The initial public release of OceanDirect.
+

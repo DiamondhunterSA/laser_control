@@ -1,0 +1,140 @@
+﻿namespace Halcon_Code
+{
+    partial class Halconcode
+    {
+        /// <summary>
+        /// 必需的设计器变量。
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        /// 清理所有正在使用的资源。
+        /// </summary>
+        /// <param name="disposing">如果应释放托管资源，为 true；否则为 false。</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows 窗体设计器生成的代码
+
+        /// <summary>
+        /// 设计器支持所需的方法 - 不要
+        /// 使用代码编辑器修改此方法的内容。
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.OpenCamera = new System.Windows.Forms.Button();
+            this.Grab = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.CameraName = new System.Windows.Forms.ComboBox();
+            this.CamerScan = new System.Windows.Forms.Button();
+            this.hWindowControl1 = new HalconDotNet.HWindowControl();
+            this.button1 = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // OpenCamera
+            // 
+            this.OpenCamera.Location = new System.Drawing.Point(1041, 58);
+            this.OpenCamera.Name = "OpenCamera";
+            this.OpenCamera.Size = new System.Drawing.Size(154, 22);
+            this.OpenCamera.TabIndex = 11;
+            this.OpenCamera.Text = "打开相机";
+            this.OpenCamera.UseVisualStyleBackColor = true;
+            this.OpenCamera.Click += new System.EventHandler(this.OpenCamera_Click);
+            // 
+            // Grab
+            // 
+            this.Grab.Location = new System.Drawing.Point(1203, 58);
+            this.Grab.Name = "Grab";
+            this.Grab.Size = new System.Drawing.Size(147, 22);
+            this.Grab.TabIndex = 10;
+            this.Grab.Text = "开始采集";
+            this.Grab.UseVisualStyleBackColor = true;
+            this.Grab.Click += new System.EventHandler(this.Grab_Click_1);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(978, 28);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(65, 12);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "相机选择：";
+            // 
+            // CameraName
+            // 
+            this.CameraName.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CameraName.FormattingEnabled = true;
+            this.CameraName.Location = new System.Drawing.Point(1041, 25);
+            this.CameraName.Name = "CameraName";
+            this.CameraName.Size = new System.Drawing.Size(244, 20);
+            this.CameraName.TabIndex = 19;
+            // 
+            // CamerScan
+            // 
+            this.CamerScan.Location = new System.Drawing.Point(1291, 23);
+            this.CamerScan.Name = "CamerScan";
+            this.CamerScan.Size = new System.Drawing.Size(59, 23);
+            this.CamerScan.TabIndex = 21;
+            this.CamerScan.Text = "刷新";
+            this.CamerScan.UseVisualStyleBackColor = true;
+            this.CamerScan.Click += new System.EventHandler(this.CamerScan_Click);
+            // 
+            // hWindowControl1
+            // 
+            this.hWindowControl1.BackColor = System.Drawing.Color.Black;
+            this.hWindowControl1.BorderColor = System.Drawing.Color.Black;
+            this.hWindowControl1.ImagePart = new System.Drawing.Rectangle(0, 0, 640, 480);
+            this.hWindowControl1.Location = new System.Drawing.Point(13, 13);
+            this.hWindowControl1.Name = "hWindowControl1";
+            this.hWindowControl1.Size = new System.Drawing.Size(910, 815);
+            this.hWindowControl1.TabIndex = 22;
+            this.hWindowControl1.WindowSize = new System.Drawing.Size(910, 815);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(1119, 114);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 23;
+            this.button1.Text = "停止采集";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // Halconcode
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1478, 840);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.hWindowControl1);
+            this.Controls.Add(this.CamerScan);
+            this.Controls.Add(this.CameraName);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.OpenCamera);
+            this.Controls.Add(this.Grab);
+            this.Name = "Halconcode";
+            this.Text = "code";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Halconcode_FormClosing);
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.Button OpenCamera;
+        private System.Windows.Forms.Button Grab;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox CameraName;
+        private System.Windows.Forms.Button CamerScan;
+        private HalconDotNet.HWindowControl hWindowControl1;
+        private System.Windows.Forms.Button button1;
+    }
+}
+
