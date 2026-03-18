@@ -60,7 +60,7 @@ def measure_line_width(image_path, roi_coords):
 # ROI 坐标 [y_start, y_end, x_start, x_end]
 my_roi = [600, 800, 150, 450]
 # 待处理的图片文件夹
-folder = r'D:\ccd\test 总\test 向上10微米'
+folder = r'D:\ccd\screenshots'
 
 files = sorted([f for f in os.listdir(folder) if f.lower().endswith('.png')])
 print(f"找到 {len(files)} 张图片，开始批量处理...")

@@ -1,15 +1,7 @@
 import serial
 import time
 
-# 配置串口参数 (端口号请根据你的实际情况修改)
-ser = serial.Serial(
-    port='COM4',        # 串口号
-    baudrate=9600,      # 波特率
-    bytesize=serial.EIGHTBITS,
-    parity=serial.PARITY_NONE,
-    stopbits=serial.STOPBITS_ONE,
-    timeout=1           # 读超时时间（秒）
-)
+ser = None
 
 # 定义核心命令函数
 # 全局命令（十进制数）
@@ -24,34 +16,61 @@ GLOBAL_COMMANDS = {
     'gate_off': 71  # 'G' 门控关闭
 }
 
+def init_shutter(port='COM4', baudrate=9600, timeout=1):
+    global ser
+    try:
+        if ser is not None and ser.is_open:
+            return True
+
+        ser = serial.Serial(
+            port=port,
+            baudrate=baudrate,
+            bytesize=serial.EIGHTBITS,
+            parity=serial.PARITY_NONE,
+            stopbits=serial.STOPBITS_ONE,
+            timeout=timeout,
+        )
+        print(f"已连接到 {ser.port}")
+        return True
+    except Exception as e:
+        print(f"初始化快门串口失败: {e}")
+        ser = None
+        return False
+
+
 # 发送命令的函数
 def send_shutter_command(command_name):
+    if ser is None or not ser.is_open:
+        print("快门串口未初始化")
+        return False
+
     if command_name in GLOBAL_COMMANDS:
         cmd_byte = GLOBAL_COMMANDS[command_name].to_bytes(1, 'big')
         ser.write(cmd_byte)
         print(f"已发送命令: {command_name} (字节: {cmd_byte.hex()})")
-    else:
-        print(f"未知命令: {command_name}")
+        return True
 
-# 使用示例
-try:
-    if ser.is_open:
-        print(f"已连接到 {ser.port}")
+    print(f"未知命令: {command_name}")
+    return False
 
-        # 示例：打开快门，等待2秒，然后关闭
-        send_shutter_command('open')
-        time.sleep(20)
-        #send_shutter_command('close')
 
-        # 示例：发送一个触发脉冲
-        # send_shutter_command('trigger')
-        # time.sleep(0.5) # 根据快门动作时间调整
-        # send_shutter_command('trigger') # 再次触发以关闭（取决于当前状态）
+def close_shutter():
+    global ser
+    if ser is not None and ser.is_open:
+        ser.close()
+        print("串口已关闭")
+    ser = None
 
-except Exception as e:
-    print(f"操作出错: {e}")
-finally:
-    ser.close()
-    print("串口已关闭")
+
+if __name__ == '__main__':
+    try:
+        if init_shutter():
+            #send_shutter_command('open')
+            #time.sleep(2)
+            send_shutter_command('close')
+    except Exception as e:
+        print(f"操作出错: {e}")
+    finally:
+        close_shutter()
 
 

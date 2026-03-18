@@ -145,6 +145,44 @@ class PriorZStage:
                 pass
             self.session_id = -1
 
+
+def move_rel_microns_with_cmd(cmd_func, microns, resolution_microns=0.1, poll_interval=0.05):
+    """
+    使用外部 cmd 函数执行 Z 轴相对移动。
+    cmd_func 需要兼容: cmd_func(message, verbose=False) -> (error_code, response)
+    """
+    steps = int(microns / resolution_microns)
+    if steps == 0:
+        print("移动距离过小，忽略。")
+        return False
+
+    error_code, response = cmd_func(f"controller.z.move-relative {steps}", verbose=False)
+    if error_code != 0:
+        print(f"Z轴相对移动失败: {response}")
+        return False
+
+    while True:
+        busy_code, busy_response = cmd_func("controller.z.busy.get", verbose=False)
+        if busy_code == 0 and busy_response.strip() == "0":
+            break
+        time.sleep(poll_interval)
+
+    return True
+
+
+def get_z_position_microns_with_cmd(cmd_func, resolution_microns=0.1):
+    """
+    使用外部 cmd 函数读取当前 Z 轴位置（微米）。
+    """
+    error_code, response = cmd_func("controller.z.position.get", verbose=False)
+    if error_code != 0:
+        return None
+
+    try:
+        return int(response.strip()) * resolution_microns
+    except Exception:
+        return None
+
 # ==========================================
 # 主程序
 # ==========================================
@@ -168,7 +206,7 @@ if __name__ == "__main__":
         print(f"初始位置: {start_z:.2f} 微米")
         
         # 2. 向上移动 2 微米  <--- 修改这里的数字！！！！！
-        z_stage.move_rel_microns(-2.0)
+        z_stage.move_rel_microns(2.0)
         
         # 3. 验证新位置
         end_z = z_stage.get_position()

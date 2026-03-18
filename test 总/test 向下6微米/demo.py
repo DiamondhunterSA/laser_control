@@ -99,4 +99,4 @@ def analyze_laser_line(image_path, pixel_to_um=1.0):
 # 使用示例
 # image_path: 你的图片路径
 # pixel_to_um: 你的相机标定系数（1个像素代表多少微米），若不确定先填1.0
-analyze_laser_line('laser_line_X32_Y4797_20260208_181637', pixel_to_um=1.0)
+analyze_laser_line('D:\ccd\screenshots\laser_line_X20_Y552_P0.0132W_20260310_134213.png', pixel_to_um=1.0)
