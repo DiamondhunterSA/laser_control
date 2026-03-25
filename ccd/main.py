@@ -29,6 +29,11 @@ from autofocus_workflows import (
     auto_focus_refine_with_display,
     quick_auto_focus,
 )
+from autowork import (
+    collect_ablation_loop_config,
+    run_one_click_ablation_loop,
+    get_current_z_from_stage,
+)
 
 
 def parse_current_z(default_z=0):
@@ -178,7 +183,18 @@ def capture_laser_result_image(x_feedrate, avg_power=None, camera_index=0):
             y_final = 0.0
             print("获取XY位置失败，使用默认值(0,0)")
 
-        filename_parts = [f"laser_line_X{x_feedrate:.0f}_Y{y_final:.0f}"]
+        z_error_code, z_response = get_stage_zposition()
+        if z_error_code == 0:
+            try:
+                z_final = float(z_response.strip())
+            except ValueError:
+                z_final = 0.0
+                print(f"无法解析Z位置，使用默认值0: {z_response}")
+        else:
+            z_final = 0.0
+            print("获取Z位置失败，使用默认值0")
+
+        filename_parts = [f"laser_line_X{x_feedrate:.0f}_Y{y_final:.0f}_Z{z_final:.0f}"]
         if avg_power is not None:
             filename_parts.append(f"P{avg_power:.4f}W")
 
@@ -260,6 +276,18 @@ def handle_laser_line_task():
             close_power_meter(powermeter)
 
 
+def handle_one_click_ablation_loop_task(current_z):
+    print("\n进入功能7：一键烧蚀循环...")
+
+    stage_z = get_current_z_from_stage(default_z=current_z)
+    cfg = collect_ablation_loop_config(stage_z)
+
+    input("\n按回车键开始执行功能7...")
+    rounds_done, end_z = run_one_click_ablation_loop(cfg, capture_callback=capture_laser_result_image)
+    print(f"功能7完成：总轮次={rounds_done}, 结束Z={end_z:.2f}")
+    return int(end_z)
+
+
 def main():
     print("=" * 60)
     print("CCD相机自动对焦系统（拆分版）")
@@ -301,9 +329,10 @@ def main():
             print("4. 测试截图功能")
             print("5. 激光直线烧蚀")
             print("6. 退出程序")
+            print("7. 一键烧蚀循环")
             print("=" * 60)
 
-            choice = input("请输入选项 (1-6): ").strip()
+            choice = input("请输入选项 (1-7): ").strip()
 
             if choice == "1":
                 handle_realtime_mode(camera_list)
@@ -318,6 +347,8 @@ def main():
             elif choice == "6":
                 print("退出程序...")
                 break
+            elif choice == "7":
+                current_z = handle_one_click_ablation_loop_task(current_z)
             else:
                 print("无效选项，请重新输入")
     finally:

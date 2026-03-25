@@ -11,7 +11,7 @@ from typing import List
 from ctypes import c_char, cdll, c_int, c_int32, c_ushort, c_uint, c_long, create_string_buffer, c_ulong, c_ubyte, c_double, c_float, c_longlong, POINTER, byref
 from enum import Enum,auto
 # 添加oceandirect包的路径到Python路径
-oceandirect_path = r"E:\ccd\OceanDirect SDK\Python\oceandirect\lib"  # 修改为实际路径
+oceandirect_path = r"D:\\ccd\\OceanDirect SDK\\Python\\oceandirect\\lib"  # 修改为实际路径
 #sys.path.append(oceandirect_path)
 sys.path.insert(0,oceandirect_path)
 current_system_path = os.environ.get('PATH', '')

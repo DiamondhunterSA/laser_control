@@ -16,13 +16,7 @@ if correct_sdk_path not in current_system_path:
 
 from dvp import *
 from laser_shutter import init_shutter, send_shutter_command
-from devices_stage import cmd, move_stage_velocity, stop_stage_xy, reset_stage_velocity_cache
-
-
-# WASD移动速度修改位置: 默认 XY 连续移动速度 (um/s)
-WASD_XY_DEFAULT_SPEED_UM_S = 5.0
-# WASD按住检测超时: 超过该时间未收到按键重复信号则停止 (秒)
-WASD_RELEASE_TIMEOUT_S = 0.2
+from devices_stage import cmd
 
 
 def _load_z_relative_module():
@@ -37,20 +31,6 @@ def _load_z_relative_module():
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
-
-
-def _get_xy_velocity_from_wasd(key_low, speed_um_s):
-    speed = abs(float(speed_um_s))
-
-    if key_low in (ord("w"), ord("W")):
-        return 0.0, speed
-    if key_low in (ord("s"), ord("S")):
-        return 0.0, -speed
-    if key_low in (ord("a"), ord("A")):
-        return -speed, 0.0
-    if key_low in (ord("d"), ord("D")):
-        return speed, 0.0
-    return None
 
 
 def put_chinese_text(img, text, position, text_color=(255, 255, 255), text_size=30):
@@ -182,13 +162,7 @@ def close_camera(camera):
         print(f"关闭相机时出错: {e}")
 
 
-def runccd_realtime(
-    camera_index=0,
-    shutter_port="COM4",
-    z_step_microns=2.0,
-    xy_speed_um_s=WASD_XY_DEFAULT_SPEED_UM_S,
-    wasd_enabled=True,
-):
+def runccd_realtime(camera_index=0, shutter_port="COM4", z_step_microns=2.0):
     camera = open_camera(camera_index)
     if camera is None:
         return
@@ -202,19 +176,16 @@ def runccd_realtime(
     z_step_max = 20.0
     z_step_delta = 0.5
     z_step_microns = max(z_step_min, min(z_step_max, float(z_step_microns)))
-    xy_speed_um_s = max(0.1, float(xy_speed_um_s))
-    xy_status_text = "XY: STOP"
-    last_wasd_signal_time = 0.0
 
     print(
         "进入实时显示模式 "
-        "(按ESC退出，按S保存，按L切换快门，WASD移动XY，方向键上/下移动Z轴，方向键左/右调步长)"
+        "(按ESC退出，按S保存，按L切换快门，方向键上/下移动Z轴，方向键左/右调步长)"
     )
     try:
         while True:
-            now = time.time()
             mat = capture_image(camera)
             if mat is not None:
+                now = time.time()
                 if z_helper is not None and now - last_z_read_time >= 0.25:
                     z_um = z_helper.get_z_position_microns_with_cmd(cmd)
                     if z_um is not None:
@@ -223,27 +194,13 @@ def runccd_realtime(
 
                 overlay = put_chinese_text(mat.copy(), current_z_text, (10, 10), text_size=22)
                 overlay = put_chinese_text(overlay, f"步长: {z_step_microns:.2f} um", (10, 40), text_size=22)
-                overlay = put_chinese_text(overlay, f"XY速度: {xy_speed_um_s:.2f} um/s", (10, 70), text_size=22)
-                overlay = put_chinese_text(overlay, xy_status_text, (10, 100), text_size=22)
                 cv2.imshow(
-                    "实时显示 (按ESC退出，按S保存，按L切换快门，WASD移动XY，方向键上/下移动Z轴，方向键左/右调步长)",
+                    "实时显示 (按ESC退出，按S保存，按L切换快门，方向键上/下移动Z轴，方向键左/右调步长)",
                     overlay,
                 )
 
             key = cv2.waitKeyEx(1)
             key_low = key & 0xFF
-
-            if wasd_enabled:
-                wasd_velocity = _get_xy_velocity_from_wasd(key_low, xy_speed_um_s)
-                if wasd_velocity is not None:
-                    last_wasd_signal_time = now
-                    ret, _ = move_stage_velocity(wasd_velocity[0], wasd_velocity[1], dedupe=True, verbose=False)
-                    if ret == 0:
-                        xy_status_text = f"XY: vx={wasd_velocity[0]:.2f}, vy={wasd_velocity[1]:.2f}"
-                elif now - last_wasd_signal_time > WASD_RELEASE_TIMEOUT_S:
-                    ret, _ = stop_stage_xy(verbose=False)
-                    if ret == 0:
-                        xy_status_text = "XY: STOP"
 
             if key_low == 27:
                 break
@@ -301,10 +258,6 @@ def runccd_realtime(
                 else:
                     print(f"已到最大步长 {z_step_max:.2f} um")
     finally:
-        try:
-            stop_stage_xy(verbose=False)
-        finally:
-            reset_stage_velocity_cache()
         cv2.destroyAllWindows()
         close_camera(camera)
 

@@ -5,7 +5,6 @@ from ctypes import WinDLL, create_string_buffer
 SDKPrior = None
 sessionID = None
 rx = create_string_buffer(1000)
-_last_stage_velocity = (None, None)
 
 
 def load_stage_sdk(sdk_dir=r"D:\\ccd\\PriorSDK 2.0.0\\x64"):
@@ -105,35 +104,7 @@ def move_stage_zabsolute(z):
 
 
 def move_stage_speed(speed_x, speed_y):
-    return move_stage_velocity(speed_x, speed_y)
-
-
-def move_stage_relative(delta_x, delta_y):
-    return cmd(f"controller.stage.move-relative {delta_x} {delta_y}")
-
-
-def move_stage_velocity(speed_x, speed_y, dedupe=True, verbose=False):
-    global _last_stage_velocity
-
-    vx = float(speed_x)
-    vy = float(speed_y)
-
-    if dedupe and _last_stage_velocity == (vx, vy):
-        return 0, "velocity unchanged"
-
-    ret, response = cmd(f"controller.stage.move-at-velocity {vx} {vy}", verbose=verbose)
-    if ret == 0:
-        _last_stage_velocity = (vx, vy)
-    return ret, response
-
-
-def stop_stage_xy(verbose=False):
-    return move_stage_velocity(0.0, 0.0, dedupe=True, verbose=verbose)
-
-
-def reset_stage_velocity_cache():
-    global _last_stage_velocity
-    _last_stage_velocity = (None, None)
+    return cmd(f"controller.stage.move-at-velocity {speed_x} {speed_y}")
 
 
 def wait_stage_idle(timeout=10.0):
