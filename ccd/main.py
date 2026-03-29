@@ -20,7 +20,9 @@ from devices_stage import (
     disconnect_controller,
     get_stage_position,
     get_stage_zposition,
+    move_stage_absolute,
     move_stage_speed,
+    set_stage_speed,
     cmd,
 )
 from autofocus_workflows import (
@@ -216,25 +218,34 @@ def handle_laser_line_task():
         print("未能连接功率计，划线将不记录功率")
 
     try:
-        for x_feedrate in range(20, 520, 5):
+        for x_feedrate in range(90, 121, 5):
             power_samples = []
             avg_power = None
 
             error_code, xy_response = get_stage_position()
             if error_code == 0:
-                x_current, _ = map(float, xy_response.split(","))
+                x_current, y_current = map(float, xy_response.split(","))
             else:
-                x_current = 0.0
+                x_current, y_current = 0.0, 0.0
                 print("获取XY位置失败，使用默认值(0,0)")
 
             line_length = 50.0
+            x_target = x_current - line_length
 
             print("打开激光器...")
             send_shutter_command("open")
 
             print("开始划线...")
-            #_ = x_current - line_length
-            move_stage_speed(x_feedrate, 0)
+            speed_ret, speed_resp = set_stage_speed(x_feedrate, x_feedrate)
+            if speed_ret != 0:
+                print(f"设置载物台速度失败，将使用控制器当前速度: {speed_resp}")
+
+            move_ret, move_resp = move_stage_absolute(x_target, y_current)
+            if move_ret != 0:
+                print(f"绝对坐标移动失败: {move_resp}")
+                send_shutter_command("close")
+                continue
+
             start_time = time.time()
 
             while True:
@@ -247,14 +258,14 @@ def handle_laser_line_task():
                 if busy_code == 0 and response.strip() == "0":
                     break
 
-                timeout_limit = line_length / x_feedrate + 5.0
+                timeout_limit = line_length / x_feedrate + 8.0
                 if time.time() - start_time > timeout_limit:
                     print("等待划线完成超时，强制退出测量循环")
+                    move_stage_speed(0, 0)
                     break
 
                 time.sleep(0.1)
 
-            move_stage_speed(0, 0)
             send_shutter_command("close")
 
             if power_samples:
@@ -297,7 +308,7 @@ def main():
     if not init_sdk():
         print("移动平台SDK初始化失败，退出程序")
         return
-
+    
     print("\n2. 连接移动平台...")
     connect_error, connect_response = connect_to_controller(3)
     if connect_error != 0:
@@ -309,7 +320,7 @@ def main():
         send_shutter_command("close")
     else:
         print("快门初始化失败，后续快门操作可能不可用")
-
+    
     print("\n4. 检测相机设备...")
     camera_list = list_cameras()
     if not camera_list:

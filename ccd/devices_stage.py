@@ -100,6 +100,10 @@ def move_stage_absolute(x, y):
     return cmd(f"controller.stage.goto-position {x} {y}")
 
 
+def set_stage_speed(speed_x, speed_y):
+    return cmd(f"controller.stage.speed.set {float(speed_x)} {float(speed_y)}")
+
+
 def move_stage_zabsolute(z):
     return cmd(f"controller.z.goto-position {z}")
 

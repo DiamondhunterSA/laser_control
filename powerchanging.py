@@ -102,7 +102,7 @@ def main():
     time.sleep(5)  # 等待归零完成（根据实际调整）
 
     # 5. 绝对移动到指定角度（例如45度）
-    target_angle = 135.0
+    target_angle = 45.0
     print(f"移动到 {target_angle} 度...")
     move_cmd = build_move_absolute(target_angle)
     ser.write(move_cmd)
